@@ -1,41 +1,35 @@
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define(
-    "Comment",
+  const ProductCategory = sequelize.define(
+    "ProductCategory",
     {
-      title: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          notEmpty: {  //config message error ของvalidate
-            msg : 'title must not be empty'
-          },
+          notEmpty: true,
         },
-      },
-
-      commentPic: {
-        type: DataTypes.STRING,
       },
     },
     { underscored: true }
   );
-  // Comment.associate = (models) => {
-  //   Comment.belongsTo(models.Customer, {
+  // ProductCategory.associate = (models) => {
+  //   ProductCategory.hasMany(models.Product, {
   //     foreignKey: {
-  //       name: "customerId",
+  //       name: "productCategoryId",
   //       allowNull: false,
   //     },
   //     onUpdate: "CASCADE",
   //     onDelete: "CASCADE",
   //   });
 
-  //   Comment.hasOne(models.OrderItem, {
+  //   ProductCategory.hasMany(models.ProductSubCategory, {
   //     foreignKey: {
-  //       name: "commentId",
+  //       name: "productCategoryId",
   //       allowNull: false,
   //     },
   //     onUpdate: "CASCADE",
   //     onDelete: "CASCADE",
   //   });
   // };
-  return Comment;
+  return ProductCategory;
 };
