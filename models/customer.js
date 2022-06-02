@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: {
         type: DataTypes.STRING,
         unique: true,
+        // defaultValue : 0,
         validate: {
           isEmail: true,
         },
@@ -44,36 +45,36 @@ module.exports = (sequelize, DataTypes) => {
 
     { underscored: true }
   );
-  // Customer.associate = (models) => {
-  //   Customer.hasMany(models.Order, {
-  //     foreignKey: {
-  //       name: 'customerId',
-  //       allowNull: false,
-  //     },
-  //     onUpdate: 'CASCADE',
-  //     onDelete: 'CASCADE',
-  //   });
+  Customer.associate = (models) => {
+    Customer.hasMany(models.Order, {
+      foreignKey: {
+        name: 'customerId',
+        allowNull: false,
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
 
-  //   Customer.hasMany(models.Comment, {
-  //     foreignKey: {
-  //       name: 'customerId',
-  //       allowNull: false,
-  //     },
-  //     onUpdate: 'CASCADE',
-  //     onDelete: 'CASCADE',
-  //   });
+    Customer.hasMany(models.Comment, {
+      foreignKey: {
+        name: 'customerId',
+        allowNull: false,
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
 
-  //   Customer.hasMany(models.Address, {
-  //     foreignKey: {
-  //       name: 'userId',
-  //       allowNull: false,
-  //     },
-  //     onUpdate: 'CASCADE',
-  //     onDelete: 'CASCADE',
-  //   });
+    Customer.hasMany(models.Address, {
+      foreignKey: {
+        name: 'customerId',
+        allowNull: false,
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
 
     
-  // };
+  };
 
   return Customer;
 };

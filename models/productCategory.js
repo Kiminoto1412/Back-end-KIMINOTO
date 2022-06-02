@@ -12,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // ProductCategory.associate = (models) => {
-  //   ProductCategory.hasMany(models.Product, {
-  //     foreignKey: {
-  //       name: "productCategoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+  ProductCategory.associate = (models) => {
+    ProductCategory.hasMany(models.Product, {
+      foreignKey: {
+        name: "productCategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   ProductCategory.hasMany(models.ProductSubCategory, {
-  //     foreignKey: {
-  //       name: "productCategoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
+    ProductCategory.hasMany(models.ProductSubCategory, {
+      foreignKey: {
+        name: "productCategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+  };
   return ProductCategory;
 };

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProductSubcategory = sequelize.define(
-    "ProductSubcategory",
+  const ProductSubCategory = sequelize.define(
+    "ProductSubCategory",
     {
       name: {
         type: DataTypes.STRING,
@@ -12,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // ProductSubcategory.associate = (models) => {
-  //   ProductSubcategory.hasMany(models.Product, {
-  //     foreignKey: {
-  //       name: "productSubcategoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+  ProductSubCategory.associate = (models) => {
+    ProductSubCategory.hasMany(models.Product, {
+      foreignKey: {
+        name: "ProductSubCategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   ProductSubcategory.belongsTo(models.ProductCategory, {
-  //     foreignKey: {
-  //       name: "productCategoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
-  return ProductSubcategory;
+    ProductSubCategory.belongsTo(models.ProductCategory, {
+      foreignKey: {
+        name: "productCategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+  };
+  return ProductSubCategory;
 };

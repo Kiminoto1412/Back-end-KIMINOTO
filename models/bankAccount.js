@@ -35,17 +35,17 @@ module.exports = (sequelize, DataTypes) => {
   
       { underscored: true }
     );
-    // BankAccount.associate = (models) => {
-    //   BankAccount.hasMany(models.Order, {
-    //     foreignKey: {
-    //       name: 'bankAccountId',
-    //       allowNull: false,
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'CASCADE',
-    //   });
+    BankAccount.associate = (models) => {
+      BankAccount.hasMany(models.Order, {
+        foreignKey: {
+          name: 'bankAccountId',
+          allowNull: false,
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
       
-    // };
+    };
   
     return BankAccount;
   };

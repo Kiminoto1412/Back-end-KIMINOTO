@@ -64,17 +64,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // Address.associate = (models) => {
-  //   Address.belongsTo(models.Customer, {
-  //     foreignKey: {
-  //       name: 'customerId',
-  //       allowNull: false,
-  //     },
-  //     onUpdate: 'CASCADE',
-  //     onDelete: 'CASCADE',
-  //   });
+  Address.associate = (models) => {
+    Address.belongsTo(models.Customer, {
+      foreignKey: {
+        name: 'customerId',
+        allowNull: false,
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
 
     
-  // };
+  };
   return Address;
 };

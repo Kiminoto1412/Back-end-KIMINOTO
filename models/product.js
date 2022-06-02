@@ -33,33 +33,33 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // Product.associate = (models) => {
-  //   Product.hasMany(models.ProductOption, {
-  //     foreignKey: {
-  //       name: "productId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+  Product.associate = (models) => {
+    Product.hasMany(models.ProductOption, {
+      foreignKey: {
+        name: "productId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   Product.belongsTo(models.ProductCategory, {
-  //     foreignKey: {
-  //       name: "categoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+    Product.belongsTo(models.ProductCategory, {
+      foreignKey: {
+        name: "productCategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   Product.belongsTo(models.ProductSubCategory, {
-  //     foreignKey: {
-  //       name: "subCategoryId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
+    Product.belongsTo(models.ProductSubCategory, {
+      foreignKey: {
+        name: "productSubcategoryId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+  };
   return Product;
 };

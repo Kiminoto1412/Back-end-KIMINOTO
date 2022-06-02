@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Productoption = sequelize.define(
-    "Productoption",
+  const ProductOption = sequelize.define(
+    "ProductOption",
     {
       color: {
         type: DataTypes.STRING,
@@ -28,24 +28,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // Productoption.associate = (models) => {
-  //   Productoption.belongsTo(models.OrderItem, {
-  //     foreignKey: {
-  //       name: "orderItemId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+  ProductOption.associate = (models) => {
+    ProductOption.hasMany(models.OrderItem, {
+      foreignKey: {
+        name: "productOptionId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   Productoption.belongsTo(models.Product, {
-  //     foreignKey: {
-  //       name: "productId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
-  return Productoption;
+    ProductOption.belongsTo(models.Product, {
+      foreignKey: {
+        name: "productId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+  };
+  return ProductOption;
 };

@@ -21,25 +21,34 @@ module.exports = (sequelize, DataTypes) => {
       },
       { underscored: true }
     );
-    // OrderItem.associate = (models) => {
-    //   OrderItem.hasOne(models.Comment, {
-    //     foreignKey: {
-    //       name: 'orderItemId',
-    //       allowNull: false,
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'CASCADE',
-    //   });
+    OrderItem.associate = (models) => {
+      OrderItem.hasOne(models.Comment, {
+        foreignKey: {
+          name: 'orderItemId',
+          allowNull: false,
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
   
-    //   OrderItem.belongsTo(models.Order, {
-    //     foreignKey: {
-    //       name: 'orderId',
-    //       allowNull: false,
-    //     },
-    //     onUpdate: 'CASCADE',
-    //     onDelete: 'CASCADE',
-    //   });
-    // };
+      OrderItem.belongsTo(models.Order, {
+        foreignKey: {
+          name: 'orderId',
+          allowNull: false,
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      OrderItem.belongsTo(models.ProductOption, {
+        foreignKey: {
+          name: 'productOptionId',
+          allowNull: false,
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+    };
     return OrderItem;
   };
   

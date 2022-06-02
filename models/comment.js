@@ -18,24 +18,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
-  // Comment.associate = (models) => {
-  //   Comment.belongsTo(models.Customer, {
-  //     foreignKey: {
-  //       name: "customerId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.Customer, {
+      foreignKey: {
+        name: "customerId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
 
-  //   Comment.hasOne(models.OrderItem, {
-  //     foreignKey: {
-  //       name: "commentId",
-  //       allowNull: false,
-  //     },
-  //     onUpdate: "CASCADE",
-  //     onDelete: "CASCADE",
-  //   });
-  // };
+    Comment.belongsTo(models.OrderItem, {
+      foreignKey: {
+        name: "commentId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+  };
   return Comment;
 };
