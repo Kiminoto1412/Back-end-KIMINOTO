@@ -1,12 +1,14 @@
 const express = require("express");
 const productController = require("../controllers/Product/adminProductController");
+const adminAuthenticate = require("../middlewares/adminAuthenticate");
 // const postController = require("../controller/postController");
-// const upload = require("../middlewares/upload");
+const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
-router.post("/",upload.fields([
+router.post("/", adminAuthenticate,upload.fields([
     { name: "productPic", maxCount: 5 },
+    {name:"sizeGuide",maxCount:1}
   ]),productController.createProduct);
 // router.patch("/me", productController.changePassword);
 

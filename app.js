@@ -16,6 +16,7 @@ const adminAuthenticate = require("./middlewares/adminAuthenticate");
 
 const customerRouter = require("./routes/customerRoute");
 const adminRouter = require("./routes/adminRouter");
+const productRoute = require("./routes/productRouter");
 // ----------------------------- Sync to create database -----------------------------
 // const { sequelize } = require('./models/index');
 // sequelize.sync({ force: true });
@@ -33,7 +34,7 @@ app.use("/customers", customerAuthenticate, customerRouter);
 //admin
 app.use("/admins", adminAuthenticate, adminRouter);
 //product
-app.use("/products", adminAuthenticate, adminRouter);
+app.use("/products", productRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

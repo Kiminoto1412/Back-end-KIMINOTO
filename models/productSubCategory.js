@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   ProductSubCategory.associate = (models) => {
     ProductSubCategory.hasMany(models.Product, {
       foreignKey: {
-        name: "ProductSubCategoryId",
+        name: "productSubCategoryId",
         allowNull: false,
       },
       onUpdate: "CASCADE",
