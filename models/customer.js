@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define(
-    'Customer',
+    "Customer",
     {
       firstName: {
         type: DataTypes.STRING,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         // defaultValue : 0,
         validate: {
-          isEmail: true,
+          notEmpty: true,
         },
       },
 
@@ -40,7 +40,44 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       profilePic: DataTypes.STRING,
-      coverPhoto: DataTypes.STRING,
+      addressName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      district: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      postalCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      moreDetails: {
+        type: DataTypes.STRING,
+      },
     },
 
     { underscored: true }
@@ -48,32 +85,21 @@ module.exports = (sequelize, DataTypes) => {
   Customer.associate = (models) => {
     Customer.hasMany(models.Order, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     });
 
     Customer.hasMany(models.Comment, {
       foreignKey: {
-        name: 'customerId',
+        name: "customerId",
         allowNull: false,
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     });
-
-    Customer.hasMany(models.Address, {
-      foreignKey: {
-        name: 'customerId',
-        allowNull: false,
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    });
-
-    
   };
 
   return Customer;
