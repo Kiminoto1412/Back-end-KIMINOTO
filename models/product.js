@@ -26,6 +26,14 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
 
+      sizeGuide: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
+
       productDescription: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -33,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
+  
   Product.associate = (models) => {
     Product.hasMany(models.ProductOption, {
       foreignKey: {

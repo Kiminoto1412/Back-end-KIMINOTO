@@ -11,17 +11,15 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 const authRouter = require("./routes/authRoutes");
-const customerAuthenticate = require('./middlewares/customerAuthenticate');
-const adminAuthenticate = require('./middlewares/adminAuthenticate');
+const customerAuthenticate = require("./middlewares/customerAuthenticate");
+const adminAuthenticate = require("./middlewares/adminAuthenticate");
 
-const customerRouter = require('./routes/customer/customerRoute')
-const adminRouter = require('./routes/customer/customerRoute')
+const customerRouter = require("./routes/customerRoute");
+const adminRouter = require("./routes/adminRouter");
 // ----------------------------- Sync to create database -----------------------------
 // const { sequelize } = require('./models/index');
 // sequelize.sync({ force: true });
 // ----------------------------- Sync to create database -----------------------------
-
-
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +32,8 @@ app.use("/auth", authRouter);
 app.use("/customers", customerAuthenticate, customerRouter);
 //admin
 app.use("/admins", adminAuthenticate, adminRouter);
+//product
+app.use("/products", adminAuthenticate, adminRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

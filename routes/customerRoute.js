@@ -1,5 +1,5 @@
 const express = require("express");
-const customerController = require("../../controllers/customer/customerController");
+const customerController = require("../controllers/customer/customerController");
 // const postController = require("../controller/postController");
 // const upload = require("../middlewares/upload");
 

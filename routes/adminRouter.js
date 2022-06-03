@@ -1,5 +1,5 @@
 const express = require("express");
-const adminController = require("../../controllers/customer/adminAuthController");
+const adminController = require("../controllers/admin/adminController");
 // const postController = require("../controller/postController");
 // const upload = require("../middlewares/upload");
 
@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/me", adminController.getMe);
 router.patch("/me", adminController.changePassword);
+
+
 
 // router.patch(
 //   "/",
