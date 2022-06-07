@@ -55,19 +55,25 @@ exports.signup = async (req, res, next) => {
     } = req.body;
     // console.log(req.body)
 
-    const customerPic = {};
+    // const customerPic = {};
 
-    if (req.files?.profilePic) {
+    // if (req.files?.profilePic) {
+    //   const result = await cloudinary.upload(req.files.profilePic[0].path);
+    //   // console.log(req.customer.profilePic)
+    //   if (req.customer?.profilePic) {
+    //     //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
+    //     const splited = req.customer.profilePic.split("/"); //req.customer มาจากtoken
+    //     const publicId = splited[splited.length - 1].split(".")[0];
+    //     await cloudinary.destroy(publicId);
+    //   }
+    //   customerPic.profilePic = result.secure_url;
+    // }
+    let imageUrl={};
+    if (req.file) {
       const result = await cloudinary.upload(req.files.profilePic[0].path);
-      // console.log(req.customer.profilePic)
-      if (req.customer?.profilePic) {
-        //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
-        const splited = req.customer.profilePic.split("/"); //req.customer มาจากtoken
-        const publicId = splited[splited.length - 1].split(".")[0];
-        await cloudinary.destroy(publicId);
-      }
-      customerPic.profilePic = result.secure_url;
+      imageUrl.customerPic = result.secure_url;
     }
+    console.log(req.files)
 
     const isMobilePhone = validator.isMobilePhone(phoneNumber + "");
     // console.log(isMobilePhone)
@@ -124,7 +130,7 @@ exports.signup = async (req, res, next) => {
       district,
       postalCode,
       moreDetails,
-      profilePic: customerPic.profilePic,
+      profilePic: imageUrl.profilePic,
     });
 
     const token = genToken({ id: customer.id });

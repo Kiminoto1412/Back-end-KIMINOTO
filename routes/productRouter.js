@@ -7,9 +7,13 @@ const upload = require("../middlewares/upload");
 const router = express.Router();
 
 router.post("/", adminAuthenticate,upload.fields([
-    { name: "productPic", maxCount: 5 },
+    { name: "productPic", maxCount: 1 },
     {name:"sizeGuide",maxCount:1}
   ]),productController.createProduct);
+router.patch("/:productId", adminAuthenticate,upload.fields([
+    { name: "productPic", maxCount: 1 },
+    {name:"sizeGuide",maxCount:1}
+  ]),productController.updateProduct);
 // router.patch("/me", productController.changePassword);
 
 // router.patch(

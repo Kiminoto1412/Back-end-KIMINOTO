@@ -128,87 +128,143 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
-// exports.updateProduct = async (req, res, next) => {
-//   const t = await sequelize.transaction();
-//   try {
-//     // console.log(req.files);
-//     const { id } = req.params;
-//     const {
-//       name,
-//       price,
-//       productDescription,
-//       productCategoryId,
-//       productSubCategoryId,
-//       stock,
-//     } = req.body;
+exports.updateProduct = async (req, res, next) => {
+  const t = await sequelize.transaction();
+  try {
+    // console.log(req.files);
+    const { productId } = req.params;
+    const {
+      name,
+      price,
+      productDescription,
+      productCategoryId,
+      productSubCategoryId,
+      stock,
+    } = req.body;
 
-//     const stockProductPic = {};
+    const stockProductPic = {};
 
-//     if (req.files?.productPic) {
-//       const result = await cloudinary.upload(req.files.productPic[0].path);
-//       // console.log(req.product.productPic)
-//       if (req.product?.productPic) {
-//         //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
-//         const splited = req.product.productPic.split("/"); //req.product มาจากtoken
-//         const publicId = splited[splited.length - 1].split(".")[0];
-//         await cloudinary.destroy(publicId);
-//       }
-//       stockProductPic.productPic = result.secure_url;
-//     }
-//     if (req.files.sizeGuide) {
-//       const result = await cloudinary.upload(req.files.sizeGuide[0].path);
-//       stockProductPic.sizeGuide = result.secure_url;
-//     }
-//     if (req.product.sizeGuide) {
-//       //ลบรูป
-//       const splited = req.product.sizeGuide.split("/");
-//       const publicId = splited[splited.length - 1].split(".")[0];
-//       await cloudinary.destroy(publicId);
-//     }
+    if (req.files?.productPic) {
+      const result = await cloudinary.upload(req.files.productPic[0].path);
+      // console.log(req.product.productPic)
+      if (req.product?.productPic) {
+        //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
+        const splited = req.product.productPic.split("/"); //req.product มาจากtoken
+        const publicId = splited[splited.length - 1].split(".")[0];
+        await cloudinary.destroy(publicId);
+      }
+      stockProductPic.productPic = result.secure_url;
+    }
+    if (req.files.sizeGuide) {
+      const result = await cloudinary.upload(req.files.sizeGuide[0].path);
+      stockProductPic.sizeGuide = result.secure_url;
+    }
+    // console.log(req.product.sizeGuide)
+    // if (req.product.sizeGuide) {
+    //   //ลบรูป
+    //   const splited = req.product.sizeGuide.split("/");
+    //   const publicId = splited[splited.length - 1].split(".")[0];
+    //   await cloudinary.destroy(publicId);
+    // }
 
-//     const stockArray = JSON.parse(stock);
-//     // console.log(stockArray);
+    // console.log(stock)
+    const stockArray = JSON.parse(stock);
+    console.log(stockArray);
 
-//     //Create Table Product
-//     const product = await Product.update(
-//       {
-//         name,
-//         price,
-//         productPic: stockProductPic.productPic,
-//         sizeGuide: stockProductPic.sizeGuide,
-//         productCategoryId,
-//         productSubCategoryId,
-//         productDescription,
-//       },
-//       { transaction: t }
-//     );
+    //Update Table Product
+    const product = await Product.update(
+      {
+        name,
+        price,
+        productPic: stockProductPic.productPic,
+        sizeGuide: stockProductPic.sizeGuide,
+        productCategoryId,
+        productSubCategoryId,
+        productDescription,
+      },
+      { where: { id: productId } },
+      { transaction: t }
+    );
 
-//     // Update ทีละproductOptionId
-//     const newStock = stockArray.forEach(obj => {
-//       await ProductOption.update(
-//         obj,
-//         { where: { id:obj.id} },
-//         {
-//           transaction: t,
-//         }
-//       );
-//     });
+    // const productOption = await ProductOption.bulkCreate(newStock, {
+    //   transaction: t,
+    // });
 
-//     await t.commit();
-//     res.json({ product });
-//   } catch (err) {
-//     await t.rollback();
-//     next(err);
-//   } finally {
-//     // console.log(req.files);
-//     if (req.files.productPic) {
-//       fs.unlinkSync(req.files.productPic[0].path);
-//     }
-//     if (req.files.sizeGuide) {
-//       fs.unlinkSync(req.files.sizeGuide[0].path);
-//     }
-//   }
-// };
+    // // Update ทีละproductOptionId
+    // const newStock = stockArray.forEach(obj => {
+    //   await ProductOption.update(
+    //     obj,
+    //     { where: { id:obj.id} },
+    //     {
+    //       transaction: t,
+    //     }
+    //   );
+    // });
+
+    // Update ทีละproductOptionId
+    // const newStock = stockArray.forEach(async (obj) => {
+    //   //ถ้าในobjมีid จะ .idได้ ให้findOneต่อ และ update
+    // if (obj.id) {
+    //   const p = await ProductOption.findOne({ where: { id: obj.id } });
+
+    //   await ProductOption.update(
+    //     obj,
+    //     { where: { id: obj.id } },
+    //     {
+    //       transaction: t,
+    //     }
+    //   );
+    //   } //ถ้ายังไม่เคยมีobj.id === productOptionId แสดงว่าให้createมา
+    //   else {
+    //     console.log({ ...obj, productId });
+    //     // console.log(productId)
+    //     await ProductOption.create(
+    //       { ...obj, productId },
+    //       {
+    //         transaction: t,
+    //       }
+    //     );
+    //   }
+    // });
+
+    for (obj of stockArray) {
+      if (obj.id) {
+        const p = await ProductOption.findOne({ where: { id: obj.id } });
+        if (!p) {
+          createError("product option not found");
+        }
+        await ProductOption.update(
+          obj,
+          { where: { id: obj.id } },
+          {
+            transaction: t,
+          }
+        );
+      } else {
+        await ProductOption.create(
+          { ...obj, productId },
+          {
+            transaction: t,
+          }
+        );
+      }
+    }
+    await t.commit();
+    console.log("Already Commit");
+    res.json({ product });
+  } catch (err) {
+    await t.rollback();
+    next(err);
+  } finally {
+    // console.log(req.files);
+    if (req.files.productPic) {
+      fs.unlinkSync(req.files.productPic[0].path);
+    }
+    if (req.files.sizeGuide) {
+      fs.unlinkSync(req.files.sizeGuide[0].path);
+    }
+  }
+};
 
 exports.createLike = async (req, res, next) => {
   const t = await sequelize.transaction(); //start transaction
