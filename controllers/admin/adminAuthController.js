@@ -30,7 +30,7 @@ exports.login = async (req, res, next) => {
     }
 
     const token = genToken({ id: admin.id });
-    res.json({ token });
+    res.json({ token ,role:"admin"});
   } catch (err) {
     next(err);
   }
@@ -98,7 +98,7 @@ exports.signup = async (req, res, next) => {
 
     const token = genToken({ id: admin.id });
 
-    res.status(201).json({ token });
+    res.status(201).json({ token , role:"admin"});
   } catch (err) {
     next(err);
   } finally {

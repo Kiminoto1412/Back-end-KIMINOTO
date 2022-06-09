@@ -17,14 +17,27 @@ module.exports = async (req, res, next) => {
     }
 
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
     const customer = await Customer.findOne({
       where: { id: payload.id },
       attributes: { exclude: ["password"] }, //ไม่ส่งpasswordไป
     });
-    if (!customer) {
+
+    const admin = await Admin.findOne({
+      where: { id: payload.id },
+      attributes: { exclude: ["password"] }, //ไม่ส่งpasswordไป
+    });
+    if (!admin && !customer) {
       createError("you are unauthorized", 401);
     }
-    req.customer = customer;
+    if (admin) {
+      req.admin = admin;
+      req.role = "admin";
+    } else if (customer) {
+      req.customer = customer;
+      req.role = "customer";
+    }
+
     next();
   } catch (err) {
     next(err);

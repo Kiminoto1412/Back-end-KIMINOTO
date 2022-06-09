@@ -30,7 +30,7 @@ exports.login = async (req, res, next) => {
     }
 
     const token = genToken({ id: customer.id });
-    res.json({ token });
+    res.json({ token ,role:"customer"});
   } catch (err) {
     next(err);
   }
@@ -38,7 +38,6 @@ exports.login = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    console.log(req.files)
     const {
       firstName,
       lastName,
@@ -53,27 +52,29 @@ exports.signup = async (req, res, next) => {
       postalCode,
       moreDetails,
     } = req.body;
-    // console.log(req.body)
 
-    // const customerPic = {};
+    console.log("test");
+    console.log(JSON.stringify(req.files.profilePic));
 
-    // if (req.files?.profilePic) {
-    //   const result = await cloudinary.upload(req.files.profilePic[0].path);
-    //   // console.log(req.customer.profilePic)
-    //   if (req.customer?.profilePic) {
-    //     //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
-    //     const splited = req.customer.profilePic.split("/"); //req.customer มาจากtoken
-    //     const publicId = splited[splited.length - 1].split(".")[0];
-    //     await cloudinary.destroy(publicId);
-    //   }
-    //   customerPic.profilePic = result.secure_url;
-    // }
-    let imageUrl={};
-    if (req.file) {
+    const customerPic = {};
+
+    if (req.files?.profilePic) {
       const result = await cloudinary.upload(req.files.profilePic[0].path);
-      imageUrl.customerPic = result.secure_url;
+      // console.log(req.customer.profilePic)
+      if (req.customer?.profilePic) {
+        //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
+        const splited = req.customer.profilePic.split("/"); //req.customer มาจากtoken
+        const publicId = splited[splited.length - 1].split(".")[0];
+        await cloudinary.destroy(publicId);
+      }
+      customerPic.profilePic = result.secure_url;
     }
-    console.log(req.files)
+    // let imageUrl={};
+    // if (req.file) {
+    //   const result = await cloudinary.upload(req.files.profilePic[0].path);
+    //   imageUrl.customerPic = result.secure_url;
+    // }
+    // console.log(req.files)
 
     const isMobilePhone = validator.isMobilePhone(phoneNumber + "");
     // console.log(isMobilePhone)
@@ -94,7 +95,7 @@ exports.signup = async (req, res, next) => {
     if (password.length < 8) {
       createError("password must be at least 8 charactor", 400);
     }
-
+    console.log(password !== confirmPassword)
     if (password !== confirmPassword) {
       createError("password did not match", 400);
     }
@@ -130,12 +131,12 @@ exports.signup = async (req, res, next) => {
       district,
       postalCode,
       moreDetails,
-      profilePic: imageUrl.profilePic,
+      profilePic: customerPic.profilePic,
     });
 
     const token = genToken({ id: customer.id });
 
-    res.status(201).json({ token });
+    res.status(201).json({ token ,role:"customer" });
   } catch (err) {
     next(err);
   } finally {
@@ -144,4 +145,3 @@ exports.signup = async (req, res, next) => {
     }
   }
 };
-

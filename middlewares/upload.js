@@ -1,11 +1,11 @@
 //npm i multer ใช้รับข้อมูลที่เป็น file data
 const multer = require("multer");
-const {v4:uuidv4} = require('uuid')
+const { v4: uuidv4 } = require("uuid");
 // module.exports = multer({dest: 'public/images'}) //ทำแบบกากๆ
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // console.log(file);
+    console.log(file);
     cb(null, "public/images"); //cb(error obj ,destinationที่จะให้รูปส่งไป)
   },
   filename: (req, file, cb) => {

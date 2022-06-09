@@ -3,6 +3,20 @@ const fs = require("fs");
 const createError = require("../../utils/createError");
 const cloudinary = require("../../utils/cloudinary");
 
+exports.getProduct = async (req, res, next) => {
+  try {
+    const {productId} = req.params
+    const product = await Product.findAll({
+      where:{id : productId},
+      include: ProductOption,
+    });
+    console.log(product)
+    res.json({product})
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.createProduct = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
@@ -38,15 +52,24 @@ exports.createProduct = async (req, res, next) => {
     const stockProductPic = {};
 
     if (req.files?.productPic) {
-      const result = await cloudinary.upload(req.files.productPic[0].path);
-      // console.log(req.product.productPic)
-      // if (req.product?.productPic) {
-      //   //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
-      //   const splited = req.product.productPic.split("/"); //req.product มาจากtoken
-      //   const publicId = splited[splited.length - 1].split(".")[0];
-      //   await cloudinary.destroy(publicId);
-      // }
-      stockProductPic.productPic = result.secure_url;
+      for (let pic of req.files?.productPic) {
+        const result = await cloudinary.upload(pic.path);
+        // console.log(req.product.productPic)
+        // if (req.product?.productPic) {
+        //   //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
+        //   const splited = req.product.productPic.split("/"); //req.product มาจากtoken
+        //   const publicId = splited[splited.length - 1].split(".")[0];
+        //   await cloudinary.destroy(publicId);
+        // }
+        if (stockProductPic.productPic) {
+          stockProductPic.productPic = [
+            ...stockProductPic.productPic,
+            result.secure_url,
+          ];
+        } else {
+          stockProductPic.productPic = [result.secure_url];
+        }
+      }
     }
     if (req.files.sizeGuide) {
       const result = await cloudinary.upload(req.files.sizeGuide[0].path);
@@ -77,7 +100,7 @@ exports.createProduct = async (req, res, next) => {
       {
         name,
         price,
-        productPic: stockProductPic.productPic,
+        productPic: JSON.stringify(stockProductPic.productPic),
         sizeGuide: stockProductPic.sizeGuide,
         productCategoryId,
         productSubCategoryId,
@@ -120,7 +143,9 @@ exports.createProduct = async (req, res, next) => {
     //   });
     // }
     if (req.files.productPic) {
-      fs.unlinkSync(req.files.productPic[0].path);
+      for (let pic of req.files?.productPic) {
+        fs.unlinkSync(pic.path);
+      }
     }
     if (req.files.sizeGuide) {
       fs.unlinkSync(req.files.sizeGuide[0].path);

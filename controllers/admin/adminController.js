@@ -16,7 +16,7 @@ exports.getMe = async (req, res,next) => {
         console.log(admin)
       //   const friends = await FriendService.findAcceptedFriend(req.admin.id);
       //   admin.friends = friends;
-        res.json({ admin });
+        res.json({ admin ,role:"admin"});
     }catch(err){
         next(err)
     }

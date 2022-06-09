@@ -22,7 +22,7 @@ exports.getMe = async (req, res, next) => {
     console.log(customer);
     //   const friends = await FriendService.findAcceptedFriend(req.customer.id);
     //   customer.friends = friends;
-    res.json({ customer });
+    res.json({ customer: req.customer ,admin:req.admin, role:req.role });
   } catch (err) {
     next(err);
   }
