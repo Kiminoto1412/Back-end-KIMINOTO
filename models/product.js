@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       productPic: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(5000),
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -43,6 +43,24 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Product.associate = (models) => {
+    // Product.hasMany(models.CartItem, {
+    //   foreignKey: {
+    //     name: "productId",
+    //     allowNull: false,
+    //   },
+    //   onUpdate: "CASCADE",
+    //   onDelete: "CASCADE",
+    // });
+
+    // Product.hasMany(models.OrderItem, {
+    //   foreignKey: {
+    //     name: "productId",
+    //     allowNull: false,
+    //   },
+    //   onUpdate: "CASCADE",
+    //   onDelete: "CASCADE",
+    // });
+
     Product.hasMany(models.ProductOption, {
       foreignKey: {
         name: "productId",

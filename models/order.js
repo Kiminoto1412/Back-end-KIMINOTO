@@ -1,4 +1,3 @@
-const { IN_CART, PENDING, SUCCESS } = require("../config/constrants");
 
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define(
@@ -18,20 +17,15 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
-      paymentSlip: {
-        type: DataTypes.STRING,
-      },
-      paymentDate: {
-        type: DataTypes.DATE,
-      },
-      status: {
-        type: DataTypes.ENUM(IN_CART, PENDING, SUCCESS),
-        allowNull: false,
-        defaultValue: IN_CART,
-        validate: {
-          notEmpty: true,
-        },
-      },
+     
+      // status: {
+      //   type: DataTypes.ENUM(IN_CART, PENDING, SUCCESS),
+      //   allowNull: false,
+      //   defaultValue: IN_CART,
+      //   validate: {
+      //     notEmpty: true,
+      //   },
+      // },
     },
 
     { underscored: true }
@@ -55,9 +49,18 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
     });
 
-    Order.belongsTo(models.BankAccount, {
+    // Order.belongsTo(models.BankAccount, {
+    //   foreignKey: {
+    //     name: "bankAccountId",
+    //     allowNull: false,
+    //   },
+    //   onUpdate: "CASCADE",
+    //   onDelete: "CASCADE",
+    // });
+
+    Order.hasOne(models.Payment, {
       foreignKey: {
-        name: "bankAccountId",
+        name: "orderId",
         allowNull: false,
       },
       onUpdate: "CASCADE",

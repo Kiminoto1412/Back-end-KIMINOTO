@@ -38,6 +38,15 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
     });
 
+    ProductOption.hasMany(models.CartItem, {
+      foreignKey: {
+        name: "productOptionId",
+        allowNull: false,
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+
     ProductOption.belongsTo(models.Product, {
       foreignKey: {
         name: "productId",

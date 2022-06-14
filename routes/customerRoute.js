@@ -8,6 +8,8 @@ const router = express.Router();
 router.get("/me", customerController.getMe);
 router.patch("/me", customerController.changePassword);
 
+//add product to cart
+
 // router.patch(
 //   "/",
 //   upload.fields([

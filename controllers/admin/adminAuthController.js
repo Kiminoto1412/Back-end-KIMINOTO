@@ -29,7 +29,7 @@ exports.login = async (req, res, next) => {
       createError("invalid credential", 400);
     }
 
-    const token = genToken({ id: admin.id });
+    const token = genToken({ id: admin.id ,role:"admin"});
     res.json({ token ,role:"admin"});
   } catch (err) {
     next(err);
@@ -96,7 +96,7 @@ exports.signup = async (req, res, next) => {
       profilePic: adminPic.profilePic,
     });
 
-    const token = genToken({ id: admin.id });
+    const token = genToken({ id: admin.id  , role:"admin"});
 
     res.status(201).json({ token , role:"admin"});
   } catch (err) {

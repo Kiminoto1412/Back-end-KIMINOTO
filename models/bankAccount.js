@@ -16,36 +16,29 @@ module.exports = (sequelize, DataTypes) => {
             notEmpty: true,
           },
         },
-        firstName: {
+        bankName: {
           type: DataTypes.STRING,
           allowNull: false,
           validate: {
             notEmpty: true,
           },
         },
-        lastName: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-              notEmpty: true,
-            },
-          },
         
       },
   
       { underscored: true }
     );
-    BankAccount.associate = (models) => {
-      BankAccount.hasMany(models.Order, {
-        foreignKey: {
-          name: 'bankAccountId',
-          allowNull: false,
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
+    // BankAccount.associate = (models) => {
+    //   ankAccount.hasMany(models.Order, {
+    //     foreignKey: {
+    //       name: 'bankAccountId',
+    //       allowNull: false,
+    //     },
+    //     onUpdate: 'CASCADE',
+    //     onDelete: 'CASCADE',
+    //   });B
       
-    };
+    // };
   
     return BankAccount;
   };

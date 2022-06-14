@@ -1,3 +1,5 @@
+const {PENDING, SUCCESS } = require("../config/constrants");
+
 module.exports = (sequelize, DataTypes) => {
     const OrderItem = sequelize.define(
       'OrderItem',
@@ -17,19 +19,27 @@ module.exports = (sequelize, DataTypes) => {
             notEmpty: true,
           },
         },
+        status: {
+          type: DataTypes.ENUM(PENDING, SUCCESS),
+          allowNull: false,
+          defaultValue: PENDING,
+          validate: {
+            notEmpty: true,
+          },
+        },
   
       },
       { underscored: true }
     );
     OrderItem.associate = (models) => {
-      OrderItem.hasOne(models.Comment, {
-        foreignKey: {
-          name: 'orderItemId',
-          allowNull: false,
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
+      // OrderItem.hasOne(models.Comment, {
+      //   foreignKey: {
+      //     name: 'orderItemId',
+      //     allowNull: false,
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE',
+      // });
   
       OrderItem.belongsTo(models.Order, {
         foreignKey: {
@@ -39,6 +49,15 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
+
+      // OrderItem.belongsTo(models.Product, {
+      //   foreignKey: {
+      //     name: 'productId',
+      //     allowNull: false,
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE',
+      // });
 
       OrderItem.belongsTo(models.ProductOption, {
         foreignKey: {

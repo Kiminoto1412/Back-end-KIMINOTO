@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "CASCADE",
     });
 
-    Customer.hasMany(models.Comment, {
+    Customer.hasMany(models.CartItem, {
       foreignKey: {
         name: "customerId",
         allowNull: false,
@@ -100,6 +100,15 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });
+
+    // Customer.hasMany(models.Comment, {
+    //   foreignKey: {
+    //     name: "customerId",
+    //     allowNull: false,
+    //   },
+    //   onUpdate: "CASCADE",
+    //   onDelete: "CASCADE",
+    // });
   };
 
   return Customer;

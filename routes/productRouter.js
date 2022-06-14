@@ -20,6 +20,8 @@ router.patch("/:productId", adminAuthenticate,upload.fields([
 
 router.get("/:productId",productController.getProduct)
 
+router.get("/",productController.getAllProduct)
+
 
 
 // router.patch(

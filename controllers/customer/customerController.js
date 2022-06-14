@@ -18,8 +18,12 @@ exports.getMe = async (req, res, next) => {
 
     // console.log(req.customer)
     // console.log(JSON.stringify(req.customer,null,2)) //ได้strออกมา แล้วเราก็parseให้ได้obj
-    const customer = JSON.parse(JSON.stringify(req.customer));
-    console.log(customer);
+
+    //ที่เพิ่งปิดไป
+    // const customer = JSON.parse(JSON.stringify(req.customer));
+    // console.log(customer);
+    //ที่เพิ่งปิดไป
+
     //   const friends = await FriendService.findAcceptedFriend(req.customer.id);
     //   customer.friends = friends;
     res.json({ customer: req.customer ,admin:req.admin, role:req.role });

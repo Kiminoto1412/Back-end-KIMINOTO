@@ -29,8 +29,8 @@ exports.login = async (req, res, next) => {
       createError("invalid credential", 400);
     }
 
-    const token = genToken({ id: customer.id });
-    res.json({ token ,role:"customer"});
+    const token = genToken({ id: customer.id, role: "customer" });
+    res.json({ token, role: "customer" });
   } catch (err) {
     next(err);
   }
@@ -95,7 +95,7 @@ exports.signup = async (req, res, next) => {
     if (password.length < 8) {
       createError("password must be at least 8 charactor", 400);
     }
-    console.log(password !== confirmPassword)
+    console.log(password !== confirmPassword);
     if (password !== confirmPassword) {
       createError("password did not match", 400);
     }
@@ -134,9 +134,9 @@ exports.signup = async (req, res, next) => {
       profilePic: customerPic.profilePic,
     });
 
-    const token = genToken({ id: customer.id });
+    const token = genToken({ id: customer.id, role: "customer" });
 
-    res.status(201).json({ token ,role:"customer" });
+    res.status(201).json({ token, role: "customer" });
   } catch (err) {
     next(err);
   } finally {
