@@ -1,5 +1,5 @@
 const createError = require("../../utils/createError");
-const { CartItem, Customer, Product } = require("../../models");
+const { CartItem, Customer, Product ,ProductOption } = require("../../models");
 
 exports.addCartItem = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ exports.addCartItem = async (req, res, next) => {
         customerId: req.customer.id,
       });
     } else if (cartItem) {
-      cartItem.quantity = quantity;
+      cartItem.quantity = +quantity;
       await cartItem.save();
     }
     res.json({ cartItem });
@@ -29,6 +29,22 @@ exports.addCartItem = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.changeQuantity = async(req,res,next) =>{
+  try{
+    const {productOptionId , quantity} =req.body
+
+    await CartItem.update({quantity},{
+      where: {
+        customerId: req.customer.id,
+        productOptionId,
+      }
+    });
+    res.json({ quantity})
+  }catch(err){
+    next(err)
+  }
+}
 
 exports.getCartItems = async (req, res, next) => {
   try {

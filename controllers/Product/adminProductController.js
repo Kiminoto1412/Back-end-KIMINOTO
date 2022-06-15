@@ -304,10 +304,10 @@ exports.updateProduct = async (req, res, next) => {
     next(err);
   } finally {
     // console.log(req.files);
-    if (req.files.productPic) {
+    if (req.files?.productPic) {
       fs.unlinkSync(req.files.productPic[0].path);
     }
-    if (req.files.sizeGuide) {
+    if (req.files?.sizeGuide) {
       fs.unlinkSync(req.files.sizeGuide[0].path);
     }
   }
