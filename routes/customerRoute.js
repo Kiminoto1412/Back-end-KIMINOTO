@@ -1,12 +1,19 @@
 const express = require("express");
 const customerController = require("../controllers/customer/customerController");
+const upload =require ("../middlewares/upload")
 // const postController = require("../controller/postController");
 // const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
 router.get("/me", customerController.getMe);
-router.patch("/me", customerController.changePassword);
+router.patch("/changePassword", customerController.changePassword);
+
+router.patch(
+  "/me",
+  upload.fields([{ name: "profilePic", maxCount: 1 }]),
+  customerController.updateProfile
+);
 
 //add product to cart
 

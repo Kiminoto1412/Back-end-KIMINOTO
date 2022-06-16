@@ -2,7 +2,7 @@
 const fs = require("fs"); //libaryที่ใช้จัดการfile system มีอยู่ในnodeอยู่แล้ว
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
-// const cloudinary = require("../utils/cloudinary");
+const cloudinary = require("../../utils/cloudinary");
 const createError = require("../../utils/createError");
 const { Customer, Friend } = require("../../models/");
 const bcrypt = require("bcryptjs");
@@ -26,7 +26,7 @@ exports.getMe = async (req, res, next) => {
 
     //   const friends = await FriendService.findAcceptedFriend(req.customer.id);
     //   customer.friends = friends;
-    res.json({ customer: req.customer ,admin:req.admin, role:req.role });
+    res.json({ customer: req.customer, admin: req.admin, role: req.role });
   } catch (err) {
     next(err);
   }
@@ -42,7 +42,7 @@ exports.changePassword = async (req, res, next) => {
 
     const isMatch = await bcrypt.compare(oldPassword, customer.password);
 
-    if(!isMatch){
+    if (!isMatch) {
       createError("Invalid old password", 400);
     }
 
@@ -59,14 +59,13 @@ exports.changePassword = async (req, res, next) => {
       createError("new password did not match", 400);
     }
 
-    
     const newHashedPassword = await bcrypt.hash(newPassword, 10);
     customer.password = newHashedPassword;
     customer.save();
 
     const token = genToken({ id: customer.id });
 
-    res.json({ message: "change password successful" , token });
+    res.json({ message: "change password successful", token });
   } catch (err) {
     next(err);
   }
@@ -105,13 +104,33 @@ exports.getcustomerById = async (req, res, next) => {
 
 exports.updateProfile = async (req, res, next) => {
   try {
-    // console.log(req.files)
-    if (!req.files) {
-      createError("ProfilePic or coverPhoto is req", 400);
-    }
-    const updateValue = {};
+    const {
+      firstName,
+      lastName,
 
-    if (req.files.profilePic) {
+      phoneNumber,
+      addressName,
+      address,
+      city,
+      district,
+      postalCode,
+      moreDetails,
+    } = req.body;
+
+    const updateValue = {
+      firstName,
+      lastName,
+
+      phoneNumber,
+      addressName,
+      address,
+      city,
+      district,
+      postalCode,
+      moreDetails,
+    };
+
+    if (req.files?.profilePic) {
       const result = await cloudinary.upload(req.files.profilePic[0].path);
       if (req.customer.profilePic) {
         //ลบรูปเก่าถ้าเราเคยส่งรูปอะไรก็ตามไปแล้วมันจะไปทับแทน  'https://res.cloudinary.com/dnozjryud/image/upload/v1653447621/szeht6anspkoytngbwd8.jpg'
@@ -121,39 +140,18 @@ exports.updateProfile = async (req, res, next) => {
       }
       updateValue.profilePic = result.secure_url;
     }
-    if (req.files.coverPhoto) {
-      const result = await cloudinary.upload(req.files.coverPhoto[0].path);
-      updateValue.coverPhoto = result.secure_url;
-    }
-    if (req.customer.coverPhoto) {
-      //ลบรูป
-      const splited = req.customer.coverPhoto.split("/");
-      const publicId = splited[splited.length - 1].split(".")[0];
-      await cloudinary.destroy(publicId);
-    }
+
+    console.log(updateValue);
+
     await Customer.update(updateValue, { where: { id: req.customer.id } });
-    res.json({ ...updateValue });
-    // if (!req.file) { //สำหรับการใช้ multerแบบ single
-
-    // if (!req.files) {  //สำหรับการใช้ multerแบบ field ตอนนี้เราใช้แบบfieldแล้ว เพราะจะรับรูปได้หลายรูป
-    //   createError("profilePic is required", 400);
-    // }
-
-    // const result = await cloudinary.upload(req.file.path);
-    // await Customer.update(
-    //   { profilePic: result.secure_url },
-    //   { where: { id: req.customer.id } }
-    // );
-    // fs.unlinkSync(req.file.path); //ลบรูปที่upload เข้ามาในfolderเรา แต่ต้องทำหลังที่เราupload ขึ้น cloudeนะ
-
-    // res.json({ profilePic: result.secure_url });
+    res.json({ updateValue });
   } catch (err) {
     next(err);
   } finally {
-    if (req.files.profilePic) {
+    if (req.files?.profilePic) {
       fs.unlinkSync(req.files.profilePic[0].path);
     }
-    if (req.files.coverPhoto) {
+    if (req.files?.coverPhoto) {
       fs.unlinkSync(req.files.coverPhoto[0].path);
     }
   }

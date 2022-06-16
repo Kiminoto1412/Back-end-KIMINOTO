@@ -23,7 +23,7 @@ exports.submitOrder = async (req, res, next) => {
       });
       // console.log(cartItemsIds)
       // console.log(typeof cartItemsIds)
-      const ArrayCartItemsIds = JSON.parse(cartItemsIds);
+      const ArrayCartItemsIds = JSON.parse(JSON.stringify(cartItemsIds));
       // console.log(ArrayCartItemsIds)
       ArrayCartItemsIds.map(async (el) => {
         // const { inventory } = await Product.findOne({
@@ -34,6 +34,7 @@ exports.submitOrder = async (req, res, next) => {
 
         // if (inventory >= item.quantity) {
 
+        // console.log(el)
         //el เป็นแค่ idของ cartItemนั้น
         const cartItems = await CartItem.findOne({
           where: { id: el },
@@ -51,19 +52,21 @@ exports.submitOrder = async (req, res, next) => {
           ],
         });
 
-        // console.log(cartItems);
+        console.log(cartItems);
 
         await OrderItem.create({
           orderId: order.id,
-          cartItems: cartItems.productOptionId,
+          cartItems: cartItems.ProductOption.id,
           quantity: cartItems.quantity,
           price: cartItems.ProductOption.Product.price,
           productOptionId: cartItems.ProductOption.id,
         });
         await CartItem.destroy({ where: { id: el } });
-        //   } else {
-        //     createError("not enough inventory", 502);
-        //   }
+
+
+      //   //   } else {
+      //   //     createError("not enough inventory", 502);
+      //   //   }
       });
 
       res.status(201).json({ order });

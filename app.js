@@ -20,6 +20,7 @@ const productRoute = require("./routes/productRouter");
 const cartRoute = require("./routes/cartRoute")
 const orderRoute = require("./routes/orderRoute");
 const paymentRoute = require("./routes/paymentRoute")
+const accountRoute = require("./routes/accountRoute")
 // ----------------------------- Sync to create database -----------------------------
 // const { sequelize } = require('./models/index');
 // sequelize.sync({ force: true });
@@ -44,6 +45,8 @@ app.use("/cartItems", customerAuthenticate, cartRoute);
 app.use("/orders",customerAuthenticate, orderRoute);
 
 app.use("/payments",customerAuthenticate, paymentRoute);
+
+app.use("/bankaccount",accountRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
