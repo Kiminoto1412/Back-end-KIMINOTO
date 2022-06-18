@@ -22,6 +22,9 @@ router.get("/:productId",productController.getProduct)
 
 router.get("/",productController.getAllProduct)
 
+router.get("/cat/:catId?" , productController.getCatProducts)
+// router.get("/cat/:catId?/:subcatId?" , productController.getCatProducts)
+
 
 
 // router.patch(

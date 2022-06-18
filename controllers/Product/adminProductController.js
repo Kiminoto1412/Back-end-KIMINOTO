@@ -28,6 +28,27 @@ exports.getAllProduct = async (req, res, next) => {
   }
 };
 
+exports.getCatProducts = async (req, res, next) => {
+  try {
+    let products;
+
+    if (req.params.subcatId) {
+      products = await Product.findAll({
+        where: { productSubCategoryId: req.params.subcatId },
+      });
+    } else if (req.params.catId) {
+      products = await Product.findAll({
+        where: { productCategoryId: req.params.catId },
+      });
+    } else if (!req.params.subcatId && !req.params.catId) {
+      products = await Product.findAll();
+    }
+    res.json({ products });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.createProduct = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
@@ -313,72 +334,3 @@ exports.updateProduct = async (req, res, next) => {
   }
 };
 
-// exports.getUserPost = async (req, res, next) => {
-//   try {
-//     //SELECT * FROM posts WHERE user_id IN()
-//     // const friendIds = await FriendService.findFriendId(req.user.id); //id ของเพื่อนทั้งหมดที่เป็นarray
-//     // let allId = friendIds.push(req.user.id); // เอา id ของเรา pushเข้าไปด้วย รวมเป็น all id
-//     const userId = await FriendService.findFriendId(req.user.id); //id ของเพื่อนทั้งหมดที่เป็นarray  [friendId1,friendId2,friendId3, ...]
-//     userId.push(req.user.id); // เอา id ของเรา pushเข้าไปด้วย Add myId to userId => [friendId1,friendId2,friendId3, ... , myId]
-//     const posts = await Post.findAll({
-//       where: { userId }, //userId เป็น array  where จะใช้ method IN หาpost เฉพาะคนที่เป็นเพื่อนกัน//WHERE userId IN (friendId1,friendId2,friendId3, ... , myId) = WHERE userId = 1 OR userId = 2 OR userId =3 OR ...
-//       order: [["updatedAt", "DESC"]],
-//       attributes: {
-//         exclude: ["userId"],
-//       },
-//       include: [
-//         {
-//           model: User,
-//           attributes: {
-//             exclude: [
-//               "password",
-//               "email",
-//               "phoneNumber",
-//               "coverPhoto",
-//               "createAt",
-//             ],
-//           },
-//         },
-//         {
-//           model: Like,
-//           attributes: {
-//             exclude: ["createdAt"],
-//           },
-//           include: {
-//             model: User,
-//             attributes: {
-//               exclude: [
-//                 "password",
-//                 "email",
-//                 "phoneNumber",
-//                 "coverPhoto",
-//                 "createAt",
-//               ],
-//             },
-//           },
-//         },
-//         {
-//           model: Comment,
-//           attributes: {
-//             exclude: ["createdAt", "userId"],
-//           },
-//           include: {
-//             model: User,
-//             attributes: {
-//               exclude: [
-//                 "password",
-//                 "email",
-//                 "phoneNumber",
-//                 "coverPhoto",
-//                 "createAt",
-//               ],
-//             },
-//           },
-//         },
-//       ],
-//     });
-//     res.json({ posts });
-//   } catch (err) {
-//     next(err);
-//   }
-// };

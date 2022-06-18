@@ -21,6 +21,7 @@ const cartRoute = require("./routes/cartRoute")
 const orderRoute = require("./routes/orderRoute");
 const paymentRoute = require("./routes/paymentRoute")
 const accountRoute = require("./routes/accountRoute")
+const categoryRoute = require("./routes/categoryRoute")
 // ----------------------------- Sync to create database -----------------------------
 // const { sequelize } = require('./models/index');
 // sequelize.sync({ force: true });
@@ -45,6 +46,8 @@ app.use("/cartItems", customerAuthenticate, cartRoute);
 app.use("/orders",customerAuthenticate, orderRoute);
 
 app.use("/payments",customerAuthenticate, paymentRoute);
+
+app.use("/categories",categoryRoute)
 
 app.use("/bankaccount",accountRoute);
 
