@@ -71,36 +71,36 @@ exports.changePassword = async (req, res, next) => {
   }
 };
 
-exports.getcustomerById = async (req, res, next) => {
-  try {
-    const { customerId } = req.params;
-    const customer = await Customer.findOne({
-      where: { id: customerId },
-      attributes: { exclude: ["password"] },
-    });
-    console.log(customer);
-    if (!customer) {
-      createError("customer not found", 400);
-    }
-    const result = JSON.parse(JSON.stringify(customer));
-    const friends = await FriendService.findAcceptedFriend(customer.id);
-    result.friends = friends;
+// exports.getcustomerById = async (req, res, next) => {
+//   try {
+//     const { customerId } = req.params;
+//     const customer = await Customer.findOne({
+//       where: { id: customerId },
+//       attributes: { exclude: ["password"] },
+//     });
+//     console.log(customer);
+//     if (!customer) {
+//       createError("customer not found", 400);
+//     }
+//     const result = JSON.parse(JSON.stringify(customer));
+//     const friends = await FriendService.findAcceptedFriend(customer.id);
+//     result.friends = friends;
 
-    //SELECT * FROM friends WHERE  (requestToId = customerId AND requestFromId = req.customer.Id) OR (requestToId = req.customer.id AND requestFromId = customerId)
-    const friend = await Friend.findOne({
-      where: {
-        [Op.or]: [
-          { requestToId: customer.id, requestFromId: req.customer.id },
-          { requestToId: req.customer.id, requestFromId: customer.id },
-        ],
-      },
-    });
-    result.friendStatus = friend;
-    res.json({ customer: result });
-  } catch (err) {
-    next(err);
-  }
-};
+//     //SELECT * FROM friends WHERE  (requestToId = customerId AND requestFromId = req.customer.Id) OR (requestToId = req.customer.id AND requestFromId = customerId)
+//     const friend = await Friend.findOne({
+//       where: {
+//         [Op.or]: [
+//           { requestToId: customer.id, requestFromId: req.customer.id },
+//           { requestToId: req.customer.id, requestFromId: customer.id },
+//         ],
+//       },
+//     });
+//     result.friendStatus = friend;
+//     res.json({ customer: result });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 exports.updateProfile = async (req, res, next) => {
   try {

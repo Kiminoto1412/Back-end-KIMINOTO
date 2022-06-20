@@ -6,6 +6,7 @@ const adminController = require("../controllers/admin/adminController");
 const router = express.Router();
 
 router.get("/me", adminController.getMe);
+router.get("/findCustomer/:customerId", adminController.getcustomerById);
 router.patch("/me", adminController.changePassword);
 
 

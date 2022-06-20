@@ -1,4 +1,4 @@
-const { Product, ProductOption, sequelize } = require("../../models");
+const { Product, ProductOption,ProductCategory,ProductSubCategory, sequelize } = require("../../models");
 const fs = require("fs");
 const createError = require("../../utils/createError");
 const cloudinary = require("../../utils/cloudinary");
@@ -9,7 +9,8 @@ exports.getProduct = async (req, res, next) => {
     console.log(productId)
     const product = await Product.findAll({
       where: { id: productId },
-      include: ProductOption,
+      include:[ {model:ProductOption},{model:ProductCategory},{model:ProductSubCategory}]
+      
     });
     console.log(product);
     res.json({ product });

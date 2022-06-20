@@ -3,7 +3,7 @@ const fs = require("fs"); //libaryที่ใช้จัดการfile syste
 const { Op } = require("sequelize");
 // const cloudinary = require("../utils/cloudinary");
 const createError = require("../../utils/createError");
-const { Admin } = require("../../models/");
+const { Admin,Customer } = require("../../models/");
 
 exports.getMe = async (req, res,next) => {
     try{
@@ -93,6 +93,24 @@ exports.getadminById = async (req, res, next) => {
   }
 };
 
+exports.getcustomerById = async (req, res, next) => {
+  try {
+    const { customerId } = req.params;
+    const customer = await Customer.findOne({
+      where: { id: customerId },
+      attributes: { exclude: ["password"] },
+    });
+    console.log(customer);
+    if (!customer) {
+      createError("customer not found", 400);
+    }
+
+    res.json({ customer });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.updateProfile = async (req, res, next) => {
   try {
     // console.log(req.files)
@@ -148,48 +166,3 @@ exports.updateProfile = async (req, res, next) => {
     }
   }
 };
-
-// console.log(req.file);
-// cloudinary.uploader.upload(req.file.path, async (error, result) => {
-//   if (error) {
-//     return next(error);
-//   }
-//   await admin.update(
-//     { profilePic: result.secure_url},
-//     { where: { id: req.admin.id } }
-//   );
-//     fs.unlinkSync(req.file.path)//ลบรูปที่upload เข้ามาในfolderเรา แต่ต้องทำหลังที่เราupload ขึ้น cloudeนะ
-
-//   res.json({ profilePic: result.secure_url});
-// });
-
-// await admin.update(
-//     { profilePic: req.file.path },
-//     { where: { id: req.admin.id } }
-//   );
-//   res.json({ profilePic: req.file.path });
-
-// console.log(req.files) //หน้าตาแบบข้างล่าง
-// [Object: null prototype] {
-//   profilePic: [
-//     {
-//       fieldname: 'profilePic',
-//       originalname: 'S__265494534.jpg',
-//       encoding: '7bit',
-//       mimetype: 'image/jpeg',
-//       destination: 'public/images',
-//       filename: '1653445922379.jpeg',
-//       path: 'public\\images\\1653445922379.jpeg',
-//       size: 263323
-//     }
-//       fieldname: 'coverPhoto',
-//       originalname: 'instagram.png',
-//       encoding: '7bit',
-//       mimetype: 'image/png',
-//       destination: 'public/images',
-//       filename: '1653445922405.png',
-//       path: 'public\\images\\1653445922405.png',
-//       size: 24843
-//     }
-//   ]
-// }

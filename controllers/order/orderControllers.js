@@ -115,6 +115,12 @@ exports.getAllOrders = async (req, res, next) => {
       const orders = await Order.findAll({
         include: [
           {
+            model: Customer,
+            attributes: {
+              exclude: ["password"],
+            },
+          },
+          {
             model: OrderItem,
             include: [
               {
