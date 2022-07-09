@@ -84,7 +84,7 @@ exports.createProduct = async (req, res, next) => {
     // console.log(req.files);
     const {
       name,
-      price,
+      price, 
       productDescription,
       productCategoryId,
       productSubCategoryId,
@@ -92,6 +92,8 @@ exports.createProduct = async (req, res, next) => {
     } = req.body;
 
     const stockProductPic = {};
+    // console.log(req.files.productPic)
+    console.log(req.files.sizeGuide)
 
     if (req.files?.productPic) {
       for (let pic of req.files?.productPic) {
@@ -114,7 +116,7 @@ exports.createProduct = async (req, res, next) => {
         }
       }
     }
-    if (req.files.sizeGuide) {
+    if (req.files?.sizeGuide) {
       const result = await cloudinary.upload(req.files.sizeGuide[0].path);
       stockProductPic.sizeGuide = result.secure_url;
     }
@@ -125,7 +127,7 @@ exports.createProduct = async (req, res, next) => {
     //   await cloudinary.destroy(publicId);
     // }
 
-    // console.log(stockProductPic)
+    console.log(stockProductPic)
 
     const stockArray = JSON.parse(stock);
     // console.log(stockArray);
@@ -147,7 +149,7 @@ exports.createProduct = async (req, res, next) => {
         price,
         // productPic: stockProductPic.productPic,
         productPic: JSON.stringify(stockProductPic.productPic),
-        sizeGuide: stockProductPic.sizeGuide,
+        sizeGuide:  JSON.stringify(stockProductPic.sizeGuide),
         productCategoryId,
         productSubCategoryId,
         productDescription,
@@ -240,6 +242,7 @@ exports.updateProduct = async (req, res, next) => {
 
     // console.log(stock)
     const stockArray = JSON.parse(stock);
+    console.log("-----------------------------")
     console.log(stockArray);
 
     //Update Table Product
@@ -257,57 +260,20 @@ exports.updateProduct = async (req, res, next) => {
       { transaction: t }
     );
 
-    // const productOption = await ProductOption.bulkCreate(newStock, {
-    //   transaction: t,
-    // });
-
-    // // Update ทีละproductOptionId
-    // const newStock = stockArray.forEach(obj => {
-    //   await ProductOption.update(
-    //     obj,
-    //     { where: { id:obj.id} },
-    //     {
-    //       transaction: t,
-    //     }
-    //   );
-    // });
-
-    // Update ทีละproductOptionId
-    // const newStock = stockArray.forEach(async (obj) => {
-    //   //ถ้าในobjมีid จะ .idได้ ให้findOneต่อ และ update
-    // if (obj.id) {
-    //   const p = await ProductOption.findOne({ where: { id: obj.id } });
-
-    //   await ProductOption.update(
-    //     obj,
-    //     { where: { id: obj.id } },
-    //     {
-    //       transaction: t,
-    //     }
-    //   );
-    //   } //ถ้ายังไม่เคยมีobj.id === productOptionId แสดงว่าให้createมา
-    //   else {
-    //     console.log({ ...obj, productId });
-    //     // console.log(productId)
-    //     await ProductOption.create(
-    //       { ...obj, productId },
-    //       {
-    //         transaction: t,
-    //       }
-    //     );
-    //   }
-    // });
+  
 
     for (obj of stockArray) {
-      console.log(obj.id);
-      if (obj.id) {
-        const p = await ProductOption.findOne({ where: { id: obj.id } });
-        if (!p) {
-          createError("product option not found");
-        }
+      // console.log(obj.id);
+      // console.log(obj)
+      // console.log(obj.size)
+      // console.log(obj.color)
+      // if (obj) {
+        const p = await ProductOption.findOne({ where: { size: obj.size , color: obj.color} });
+        if (p) {
+    
         await ProductOption.update(
           obj,
-          { where: { id: obj.id } },
+          { where: {  size: obj.size , color: obj.color} },
           {
             transaction: t,
           }
@@ -341,5 +307,26 @@ exports.updateProduct = async (req, res, next) => {
     if (req.files?.sizeGuide) {
       fs.unlinkSync(req.files.sizeGuide[0].path);
     }
+  }
+};
+
+exports.deleteProduct = async (req, res, next) => {
+  let t;
+  try {
+    t = await sequelize.transaction();
+    const { productId } = req.params;
+    const product = await Product.findOne({ where: { id: productId } });
+    if (!product) {
+      createError("product not found", 400);
+    } else {
+      await Product.destroy({ where: { id: productId } });
+      await ProductOption.destroy({ where: { productId } }, { transaction: t });
+    }
+
+    await t.commit();
+    res.status(204).json();
+  } catch (err) {
+    await t.rollback();
+    next(err);
   }
 };

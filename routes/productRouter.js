@@ -25,6 +25,7 @@ router.get("/",productController.getAllProduct)
 router.get("/cat/:catId?" , productController.getCatProducts)
 // router.get("/cat/:catId?/:subcatId?" , productController.getCatProducts)
 
+router.delete("/:productId", adminAuthenticate , productController.deleteProduct)
 
 
 // router.patch(
